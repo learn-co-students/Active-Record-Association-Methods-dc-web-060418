@@ -3,14 +3,19 @@ class Genre < ActiveRecord::Base
   has_many :artists, through: :songs
 
   def song_count
-    # return the number of songs in a genre
+    self.songs.length
+  end
+
+  def genre_artists
+    artist_id = self.songs.select {|song| song.artist_id}
+    artist_id.collect {|artist_id| Artist.where(id: artist_id)}.flatten
   end
 
   def artist_count
-    # return the number of artists associated with the genre
+    genre_artists.length
   end
 
   def all_artist_names
-    # return an array of strings containing every musician's name
+    genre_artists.collect {|artist_info| artist_info.name}
   end
 end
